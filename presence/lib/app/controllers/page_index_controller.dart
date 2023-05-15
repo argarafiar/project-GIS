@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:presence/app/routes/app_pages.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -24,16 +26,18 @@ class PageIndexController extends GetxController {
           Get.snackbar("Terjadi Kesalahan", dataRes["message"]);
         } else {
           Position position = dataRes["position"];
-
           List<Placemark> placemarks = await placemarkFromCoordinates(
               position.latitude, position.longitude);
-
-          print(placemarks);
           String address =
-              "${placemarks[0].street}, ${placemarks[0].subLocality}, ${placemarks[0].locality}";
+              "${placemarks[0].subLocality}, ${placemarks[0].locality}, ${placemarks[0].subAdministrativeArea}";
           await updatePosition(position, address);
-          Get.snackbar(dataRes["message"],
-              "${placemarks[0].street}, ${placemarks[0].subLocality}, ${placemarks[0].locality}");
+
+          //initial kantor
+          double distance = Geolocator.distanceBetween(
+              -7.2755247, 112.7933863, position.latitude, position.longitude);
+
+          //presensi
+          await presensi(position, address, distance);
         }
         break;
       case 2:
@@ -43,6 +47,109 @@ class PageIndexController extends GetxController {
       default:
         pageIndex.value = i;
         Get.offAllNamed(Routes.HOME);
+    }
+  }
+
+  Future<void> presensi(
+      Position position, String address, double distance) async {
+    String uid = await auth.currentUser!.uid;
+    CollectionReference<Map<String, dynamic>> colPresence =
+        await firestore.collection("pegawai").doc(uid).collection("presence");
+    QuerySnapshot<Map<String, dynamic>> snapPresence = await colPresence.get();
+
+    DateTime now = DateTime.now();
+    String todayDocID = DateFormat.yMd().format(now).replaceAll("/", "-");
+
+    String status = "Di luar area";
+    if (distance <= 200) {
+      status = "Di dalam area";
+    }
+
+    if (snapPresence.docs.length == 0) {
+      //belum pernah absen
+      await Get.defaultDialog(
+          title: "Validasi Absen",
+          middleText: "Apakah kamu yakin akan absen masuk?",
+          actions: [
+            OutlinedButton(onPressed: () => Get.back(), child: Text("batal")),
+            ElevatedButton(
+                onPressed: () async {
+                  await colPresence.doc(todayDocID).set({
+                    "date": now.toIso8601String(),
+                    "masuk": {
+                      "date": now.toIso8601String(),
+                      "lat": position.latitude,
+                      "long": position.longitude,
+                      "address": address,
+                      "status": status,
+                      "distance": distance,
+                    }
+                  });
+                  Get.back();
+                  Get.snackbar("Berhasil", "kamu telah mengisi daftar hadir");
+                },
+                child: Text("iya")),
+          ]);
+    } else {
+      //sudah pernah absen
+      DocumentSnapshot<Map<String, dynamic>> todayDoc =
+          await colPresence.doc(todayDocID).get();
+      if (todayDoc.exists) {
+        Map<String, dynamic>? dataPresenceToday = todayDoc.data();
+        if (dataPresenceToday?["keluar"] != null) {
+          Get.snackbar(
+              "Peringatan", "Kamu telah absen masuk dan keluar hari ini");
+        } else {
+          await Get.defaultDialog(
+              title: "Validasi Absen",
+              middleText: "Apakah kamu yakin akan absen keluar?",
+              actions: [
+                OutlinedButton(
+                    onPressed: () => Get.back(), child: Text("batal")),
+                ElevatedButton(
+                    onPressed: () async {
+                      await colPresence.doc(todayDocID).update({
+                        "keluar": {
+                          "date": now.toIso8601String(),
+                          "lat": position.latitude,
+                          "long": position.longitude,
+                          "address": address,
+                          "status": status,
+                          "distance": distance,
+                        }
+                      });
+                      Get.back();
+                      Get.snackbar(
+                          "Berhasil", "kamu telah berhasil absen keluar");
+                    },
+                    child: Text("iya")),
+              ]);
+        }
+      } else {
+        await Get.defaultDialog(
+            title: "Validasi Absen",
+            middleText: "Apakah kamu yakin akan absen masuk?",
+            actions: [
+              OutlinedButton(onPressed: () => Get.back(), child: Text("batal")),
+              ElevatedButton(
+                  onPressed: () async {
+                    await colPresence.doc(todayDocID).set({
+                      "date": now.toIso8601String(),
+                      "masuk": {
+                        "date": now.toIso8601String(),
+                        "lat": position.latitude,
+                        "long": position.longitude,
+                        "address": address,
+                        "status": status,
+                        "distance": distance,
+                      }
+                    });
+                    Get.back();
+                    Get.snackbar("Berhasil", "kamu telah mengisi daftar hadir");
+                  },
+                  child: Text("iya")),
+            ]);
+      }
     }
   }
 
@@ -103,7 +210,9 @@ class PageIndexController extends GetxController {
     // When we reach here, permissions are granted and we can
     // continue accessing the position of the device.
     try {
-      Position position = await Geolocator.getCurrentPosition();
+      Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
       return {
         "position": position,
         "message": "success",
