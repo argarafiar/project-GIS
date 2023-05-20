@@ -19,6 +19,7 @@ dependencies:
   geolocator: ^8.2.0
   geocoding: ^2.0.4
   syncfusion_flutter_datepicker: ^19.4.56
+  google_maps_flutter: 2.2.6
   flutter: 
     sdk: flutter
 

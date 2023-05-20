@@ -13,6 +13,9 @@ abstract class Routes {
   static const UPDATE_PASSWORD = _Paths.UPDATE_PASSWORD;
   static const DETAIL_PRESENSI = _Paths.DETAIL_PRESENSI;
   static const ALL_PRESENSI = _Paths.ALL_PRESENSI;
+  static const MAPS_PEGAWAI = _Paths.MAPS_PEGAWAI;
+  static const HOME_ADMIN = _Paths.HOME_ADMIN;
+  static const ALL_PEGAWAI = _Paths.ALL_PEGAWAI;
 }
 
 abstract class _Paths {
@@ -27,4 +30,7 @@ abstract class _Paths {
   static const UPDATE_PASSWORD = '/update-password';
   static const DETAIL_PRESENSI = '/detail-presensi';
   static const ALL_PRESENSI = '/all-presensi';
+  static const MAPS_PEGAWAI = '/maps-pegawai';
+  static const HOME_ADMIN = '/home-admin';
+  static const ALL_PEGAWAI = '/all-pegawai';
 }

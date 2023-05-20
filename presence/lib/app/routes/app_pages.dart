@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 
 import '../modules/add_pegawai/bindings/add_pegawai_binding.dart';
 import '../modules/add_pegawai/views/add_pegawai_view.dart';
+import '../modules/all_pegawai/bindings/all_pegawai_binding.dart';
+import '../modules/all_pegawai/views/all_pegawai_view.dart';
 import '../modules/all_presensi/bindings/all_presensi_binding.dart';
 import '../modules/all_presensi/views/all_presensi_view.dart';
 import '../modules/detail_presensi/bindings/detail_presensi_binding.dart';
@@ -12,6 +14,8 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
+import '../modules/maps_pegawai/bindings/maps_pegawai_binding.dart';
+import '../modules/maps_pegawai/views/maps_pegawai_view.dart';
 import '../modules/new_password/bindings/new_password_binding.dart';
 import '../modules/new_password/views/new_password_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
@@ -80,6 +84,16 @@ class AppPages {
       name: _Paths.ALL_PRESENSI,
       page: () => const AllPresensiView(),
       binding: AllPresensiBinding(),
+    ),
+    GetPage(
+      name: _Paths.MAPS_PEGAWAI,
+      page: () => MapsPegawaiView(),
+      binding: MapsPegawaiBinding(),
+    ),
+    GetPage(
+      name: _Paths.ALL_PEGAWAI,
+      page: () => const AllPegawaiView(),
+      binding: AllPegawaiBinding(),
     ),
   ];
 }

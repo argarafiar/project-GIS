@@ -40,4 +40,9 @@ class HomeController extends GetxController {
         .doc(todayID)
         .snapshots();
   }
+
+  //ambil data semua pegawai
+  Stream<QuerySnapshot<Map<String, dynamic>>> streamAllPegawai() async* {
+    yield* firestore.collection("pegawai").snapshots();
+  }
 }

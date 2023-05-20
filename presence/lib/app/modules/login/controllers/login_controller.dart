@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../../routes/app_pages.dart';
 
@@ -11,62 +12,61 @@ class LoginController extends GetxController {
   TextEditingController passC = TextEditingController();
 
   FirebaseAuth auth = FirebaseAuth.instance;
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   Future<void> login() async {
     if (emailC.text.isNotEmpty && passC.text.isNotEmpty) {
       isLoading.value = true;
-      try{
+      try {
         UserCredential userCredential = await auth.signInWithEmailAndPassword(
-          email: emailC.text,
-          password: passC.text
-        );
+            email: emailC.text, password: passC.text);
 
-        // print(UserCredential);
+        // print(userCredential.user.toString());
 
         if (userCredential.user != null) {
-          if(userCredential.user!.emailVerified == true){
+          if (userCredential.user!.emailVerified == true) {
             isLoading.value = false;
-            if(passC.text == "123456") {
+            if (passC.text == "123456") {
               Get.offAllNamed(Routes.NEW_PASSWORD);
             } else {
               Get.offAllNamed(Routes.HOME);
-
             }
           } else {
             Get.defaultDialog(
-              title: "Belum Verifikasi",
-              middleText: "Silahkan verifikasi email anda terlebih dahulu",
-              actions: [
-                OutlinedButton(
-                  onPressed: () {
-                    isLoading.value = false;
-                    Get.back();
-                  },
-                  child: Text(
-                    "CANCEL",
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    try {
-                      await userCredential.user!.sendEmailVerification();
+                title: "Belum Verifikasi",
+                middleText: "Silahkan verifikasi email anda terlebih dahulu",
+                actions: [
+                  OutlinedButton(
+                    onPressed: () {
+                      isLoading.value = false;
                       Get.back();
-                      Get.snackbar("Berhasil", "Email verifikasi telah dikirim");
-                      isLoading.value = false;
-                    } catch (e) {
-                      isLoading.value = false;
-                      Get.snackbar("Terjadi Kesalahan", "Tidak dapat mengirim email verifikasi.Hubungi admin");
-                    }
-                  },
-                  child: Text(
-                    "KIRIM ULANG",
+                    },
+                    child: Text(
+                      "CANCEL",
+                    ),
                   ),
-                ),
-              ]
-            );
+                  ElevatedButton(
+                    onPressed: () async {
+                      try {
+                        await userCredential.user!.sendEmailVerification();
+                        Get.back();
+                        Get.snackbar(
+                            "Berhasil", "Email verifikasi telah dikirim");
+                        isLoading.value = false;
+                      } catch (e) {
+                        isLoading.value = false;
+                        Get.snackbar("Terjadi Kesalahan",
+                            "Tidak dapat mengirim email verifikasi.Hubungi admin");
+                      }
+                    },
+                    child: Text(
+                      "KIRIM ULANG",
+                    ),
+                  ),
+                ]);
           }
         }
-      isLoading.value = false;
+        isLoading.value = false;
       } on FirebaseAuthException catch (e) {
         isLoading.value = false;
         if (e.code == 'user-not-found') {
