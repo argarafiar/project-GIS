@@ -56,22 +56,22 @@ class DetailPresensiView extends GetView<DetailPresensiController> {
                   "Keluar",
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                Text(data['keluar']['date'] == null
+                Text(data['keluar']?['date'] == null
                     ? "jam : -"
                     : "jam : " +
                         DateFormat.jms()
                             .format(DateTime.parse(data['keluar']!['date']))),
-                Text(data['keluar']['lat'] == null &&
-                        data['keluar']['long'] == null
+                Text(data['keluar']?['lat'] == null &&
+                        data['keluar']?['long'] == null
                     ? "Posisi : -"
                     : "Posisi : ${data['keluar']!['lat']}, ${data['keluar']!['long']}"),
-                Text(data['keluar']['status'] == null
+                Text(data['keluar']?['status'] == null
                     ? "Status : -"
                     : "Status : ${data['keluar']!['status']}"),
-                Text(data['keluar']['address'] == null
+                Text(data['keluar']?['address'] == null
                     ? "Alamat : -"
                     : "Alamat : ${data['keluar']!['address']}"),
-                Text(data['keluar']['distance'] == null
+                Text(data['keluar']?['distance'] == null
                     ? "Distance : -"
                     : "Distance : ${data['keluar']!['distance'].toString().split(".").first} Meter"),
               ],
