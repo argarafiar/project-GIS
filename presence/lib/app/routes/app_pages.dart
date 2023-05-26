@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 
 import '../modules/add_pegawai/bindings/add_pegawai_binding.dart';
 import '../modules/add_pegawai/views/add_pegawai_view.dart';
+import '../modules/adminhome/bindings/adminhome_binding.dart';
+import '../modules/adminhome/views/adminhome_view.dart';
 import '../modules/all_pegawai/bindings/all_pegawai_binding.dart';
 import '../modules/all_pegawai/views/all_pegawai_view.dart';
 import '../modules/all_presensi/bindings/all_presensi_binding.dart';
@@ -14,6 +16,8 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/login/bindings/login_binding.dart';
 import '../modules/login/views/login_view.dart';
+import '../modules/maps_admin/bindings/maps_admin_binding.dart';
+import '../modules/maps_admin/views/maps_admin_view.dart';
 import '../modules/maps_pegawai/bindings/maps_pegawai_binding.dart';
 import '../modules/maps_pegawai/views/maps_pegawai_view.dart';
 import '../modules/new_password/bindings/new_password_binding.dart';
@@ -94,6 +98,16 @@ class AppPages {
       name: _Paths.ALL_PEGAWAI,
       page: () => const AllPegawaiView(),
       binding: AllPegawaiBinding(),
+    ),
+    GetPage(
+      name: _Paths.ADMINHOME,
+      page: () => const AdminhomeView(),
+      binding: AdminhomeBinding(),
+    ),
+    GetPage(
+      name: _Paths.MAPS_ADMIN,
+      page: () => MapsAdminView(),
+      binding: MapsAdminBinding(),
     ),
   ];
 }

@@ -16,6 +16,8 @@ abstract class Routes {
   static const MAPS_PEGAWAI = _Paths.MAPS_PEGAWAI;
   static const HOME_ADMIN = _Paths.HOME_ADMIN;
   static const ALL_PEGAWAI = _Paths.ALL_PEGAWAI;
+  static const ADMINHOME = _Paths.ADMINHOME;
+  static const MAPS_ADMIN = _Paths.MAPS_ADMIN;
 }
 
 abstract class _Paths {
@@ -33,4 +35,6 @@ abstract class _Paths {
   static const MAPS_PEGAWAI = '/maps-pegawai';
   static const HOME_ADMIN = '/home-admin';
   static const ALL_PEGAWAI = '/all-pegawai';
+  static const ADMINHOME = '/adminhome';
+  static const MAPS_ADMIN = '/maps-admin';
 }

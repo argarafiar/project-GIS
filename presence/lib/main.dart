@@ -17,24 +17,22 @@ void main() async {
 
   runApp(
     StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        if(snapshot.connectionState == ConnectionState.waiting){
-          return const MaterialApp(
-            home: Scaffold(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const MaterialApp(
+                home: Scaffold(
               body: Center(
                 child: CircularProgressIndicator(),
               ),
-            )
+            ));
+          }
+          print(snapshot.data);
+          return GetMaterialApp(
+            title: "Application",
+            initialRoute: snapshot.data != null ? Routes.HOME : Routes.LOGIN,
+            getPages: AppPages.routes,
           );
-        }
-        print(snapshot.data);
-        return GetMaterialApp(
-          title: "Application",
-          initialRoute: snapshot.data != null ? Routes.HOME : Routes.LOGIN,
-          getPages: AppPages.routes,
-        );
-      }
-    ),
+        }),
   );
 }

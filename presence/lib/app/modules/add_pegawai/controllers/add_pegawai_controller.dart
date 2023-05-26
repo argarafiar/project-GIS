@@ -34,10 +34,12 @@ class AddPegawaiController extends GetxController {
           await firestore.collection("pegawai").doc(uid).set({
             "nip": nip,
             "nama": nama,
+            "address": "",
             "job": job,
             "email": email,
             "uid": uid,
             "role": "pegawai",
+            "position": {},
             "createdAt": DateTime.now().toIso8601String(),
           });
 
@@ -78,7 +80,10 @@ class AddPegawaiController extends GetxController {
   }
 
   Future<void> addPegawai() async {
-    if (nip.isNotEmpty && nama.isNotEmpty && job.isNotEmpty && email.isNotEmpty) {
+    if (nip.isNotEmpty &&
+        nama.isNotEmpty &&
+        job.isNotEmpty &&
+        email.isNotEmpty) {
       isLoading.value = true;
       Get.defaultDialog(
           title: "Validasi Admin",

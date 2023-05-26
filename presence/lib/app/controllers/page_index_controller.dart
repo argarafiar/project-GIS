@@ -15,30 +15,57 @@ class PageIndexController extends GetxController {
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  void changPage(int i) async {
-    // print('Click index=$i');
+  void changPage(int i, String role) async {
     pageIndex.value = i;
 
     switch (i) {
       case 1:
-        print("ABSEN");
-        Map<String, dynamic> dataRes = await determinePosition();
-        if (dataRes["error"]) {
-          Get.snackbar("Terjadi Kesalahan", dataRes["message"]);
+        if (role == 'admin') {
+          //ambil semua data pegawai kecuali admin
+          List<Map<String, dynamic>> data = await firestore
+              .collection("pegawai")
+              .where("role", isEqualTo: "pegawai")
+              .get()
+              .then((value) => value.docs.map((e) => e.data()).toList());
+
+          // print(data);
+
+          // filter data pegawai yang sudah pernah absen
+          // List<Map<String, dynamic>> dataPegawai = [];
+          // for (var i = 0; i < data.length; i++) {
+          //   String uid = data[i]["uid"];
+          //   QuerySnapshot<Map<String, dynamic>> snapPresence = await firestore
+          //       .collection("pegawai")
+          //       .doc(uid)
+          //       .collection("presence")
+          //       .get();
+
+          //   if (snapPresence.docs.length > 0) {
+          //     dataPegawai.add(data[i]);
+          //   }
+          // }
+
+          Get.toNamed('/maps-admin', arguments: data);
         } else {
-          Position position = dataRes["position"];
-          List<Placemark> placemarks = await placemarkFromCoordinates(
-              position.latitude, position.longitude);
-          String address =
-              "${placemarks[0].subLocality}, ${placemarks[0].locality}, ${placemarks[0].subAdministrativeArea}";
-          await updatePosition(position, address);
+          print("ABSEN");
+          Map<String, dynamic> dataRes = await determinePosition();
+          if (dataRes["error"]) {
+            Get.snackbar("Terjadi Kesalahan", dataRes["message"]);
+          } else {
+            Position position = dataRes["position"];
+            List<Placemark> placemarks = await placemarkFromCoordinates(
+                position.latitude, position.longitude);
+            String address =
+                "${placemarks[0].subLocality}, ${placemarks[0].locality}, ${placemarks[0].subAdministrativeArea}";
+            await updatePosition(position, address);
 
-          //initial kantor
-          double distance = Geolocator.distanceBetween(
-              -7.2755247, 112.7933863, position.latitude, position.longitude);
+            //initial kantor
+            double distance = Geolocator.distanceBetween(
+                -7.2755247, 112.7933863, position.latitude, position.longitude);
 
-          //presensi
-          await presensi(position, address, distance);
+            //presensi
+            await presensi(position, address, distance);
+          }
         }
         break;
       case 2:
@@ -232,5 +259,16 @@ class PageIndexController extends GetxController {
     var user =
         firestore.collection("pegawai").doc(auth.currentUser!.uid).snapshots();
     return user as Map<String, dynamic>;
+  }
+
+  Future<String> getUserRole() async {
+    String uid = auth.currentUser!.uid;
+
+    DocumentSnapshot<Map<String, dynamic>> doc =
+        await firestore.collection("pegawai").doc(uid).get();
+
+    print("role: ${doc.data()!["role"]}");
+
+    return doc.data()!["role"];
   }
 }

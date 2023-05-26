@@ -9,13 +9,24 @@ class ProfileController extends GetxController {
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  Stream<DocumentSnapshot<Map<String, dynamic>>> streamUser() async*{
+  Stream<DocumentSnapshot<Map<String, dynamic>>> streamUser() async* {
     String uid = await auth.currentUser!.uid;
 
     yield* firestore.collection("pegawai").doc(uid).snapshots();
   }
 
-  void logout() async{
+  Future<String> getUserRole() async {
+    String uid = auth.currentUser!.uid;
+
+    DocumentSnapshot<Map<String, dynamic>> doc =
+        await firestore.collection("pegawai").doc(uid).get();
+
+    print("role: ${doc.data()!["role"]}");
+
+    return doc.data()!["role"];
+  }
+
+  void logout() async {
     await auth.signOut();
     Get.offAllNamed(Routes.LOGIN);
   }

@@ -4,29 +4,6 @@ import 'package:get/get.dart';
 
 import '../controllers/maps_pegawai_controller.dart';
 
-// class MapsPegawaiView extends GetView<MapsPegawaiController> {
-//   MapsPegawaiView({Key? key}) : super(key: key);
-//   Map<String, dynamic> data = Get.arguments;
-//   @override
-//   Widget build(BuildContext context) {
-//     //parsing data
-//     double lat = data["keluar"]["lat"] ?? data["masuk"]["lat"];
-//     double long = data["keluar"]["long"] ?? data["masuk"]["long"];
-//     return Scaffold(
-//       body: Stack(
-//         children: [
-//           GoogleMap(
-//             initialCameraPosition: CameraPosition(
-//               target: LatLng(lat, long),
-//               zoom: 15,
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
 class MapsPegawaiView extends StatefulWidget {
   MapsPegawaiView({super.key});
   Map<String, dynamic> data = Get.arguments;
@@ -46,7 +23,7 @@ class _MapsPegawaiViewState extends State<MapsPegawaiView> {
         data["keluar"] != null ? data["keluar"]["lat"] : data["masuk"]["lat"];
     double long =
         data["keluar"] != null ? data["keluar"]["long"] : data["masuk"]["long"];
-    _setMarkers(data, lat, long);
+    _setMarkers(data);
     return Scaffold(
       body: Stack(
         children: [
@@ -103,12 +80,29 @@ class _MapsPegawaiViewState extends State<MapsPegawaiView> {
     );
   }
 
-  void _setMarkers(Map<String, dynamic> data, double lat, double long) {
+  void _setMarkers(Map<String, dynamic> data) {
+    if (data["keluar"] != null) {
+      _markers.add(
+        Marker(
+          //geser marker kekiri sedikit
+          anchor: Offset(0.1, 1),
+          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+          markerId: MarkerId(data["keluar"]["date"]),
+          position: LatLng(data["keluar"]["lat"], data["keluar"]["long"]),
+          infoWindow: InfoWindow(
+              title:
+                  "${data["keluar"]["date"].substring(0, 9)} | ${data["keluar"]["date"].substring(11, 19)}"),
+          onTap: () {},
+        ),
+      );
+    }
     _markers.add(
       Marker(
-        markerId: MarkerId(data["date"]),
-        position: LatLng(lat, long),
-        infoWindow: InfoWindow(title: data["date"]),
+        markerId: MarkerId(data["masuk"]["date"]),
+        position: LatLng(data["masuk"]["lat"], data["masuk"]["long"]),
+        infoWindow: InfoWindow(
+            title:
+                "${data["masuk"]["date"].substring(0, 9)} | ${data["masuk"]["date"].substring(11, 19)}"),
         onTap: () {},
       ),
     );
