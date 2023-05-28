@@ -9,6 +9,7 @@ class AdminhomeView extends GetView<AdminhomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.orange.shade50,
       appBar: AppBar(
         title: const Text('AdminhomeView'),
         centerTitle: true,

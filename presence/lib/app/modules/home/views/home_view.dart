@@ -36,166 +36,182 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('HomeView'),
-          centerTitle: true,
-        ),
-        body: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-          stream: controller.streamUser(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            }
-            if (snapshot.hasData) {
-              Map<String, dynamic> user = snapshot.data!.data()!;
-              String defaultProfile =
-                  "https://ui-avatars.com/api/?name=${user["nama"]}";
-              return SingleChildScrollView(
-                child: Container(
-                  margin: EdgeInsets.all(20),
-                  child: Column(
-                    // padding: EdgeInsets.all(20),
-                    children: [
-                      Row(
-                        children: [
-                          ClipOval(
-                            child: Container(
-                              width: 75,
-                              height: 75,
-                              color: Colors.grey[200],
-                              child: Image.network(
-                                user["profile"] != null
-                                    ? user["profile"]
-                                    : defaultProfile,
-                                fit: BoxFit.cover,
+      backgroundColor: Colors.orange.shade50,
+        body: SafeArea(
+          child: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+            stream: controller.streamUser(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              }
+              if (snapshot.hasData) {
+                Map<String, dynamic> user = snapshot.data!.data()!;
+                String defaultProfile =
+                    "https://ui-avatars.com/api/?name=${user["nama"]}";
+                return SingleChildScrollView(
+                  child: Container(
+                    margin: EdgeInsets.all(20),
+                    child: Column(
+                      // padding: EdgeInsets.all(20),
+                      children: [
+                        SizedBox(height: 10,),
+                        Row(
+                          children: [
+                            ClipOval(
+                              child: Container(
+                                width: 75,
+                                height: 75,
+                                color: Colors.grey[200],
+                                child: Image.network(
+                                  user["profile"] != null
+                                      ? user["profile"]
+                                      : defaultProfile,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "Welcome",
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
-                              ),
-                              Container(
-                                width: 200,
-                                child: Text(user["address"] != null
-                                    ? user["address"].toString()
-                                    : "Belum ada lokasi"),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
-                          stream: controller.streamAllPegawai(),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return Center(child: CircularProgressIndicator());
-                            }
-                            if (snapshot.hasData) {
-                              List<QueryDocumentSnapshot<Map<String, dynamic>>>
-                                  data = snapshot.data!.docs;
-                              if (user['role'] == 'admin') {
-                                return Container(
-                                  padding: EdgeInsets.all(20),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Colors.grey[200],
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Total Pegawai",
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Text(
-                                        (data.length - 1).toString(),
-                                        style: TextStyle(
-                                            fontSize: 30,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              } else {
-                                return Container(
-                                  padding: EdgeInsets.all(20),
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Colors.grey[200],
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        user['job'],
-                                        style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Text(
-                                        user['nip'],
-                                        style: TextStyle(
-                                            fontSize: 30,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
-                                      Text(
-                                        user['nama'],
-                                        style: TextStyle(
-                                          fontSize: 18,
+                            SizedBox(
+                              width: 20,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Text(
+                                      "Welcome ",
+                                      style: TextStyle(
+                                          fontSize: 20, fontWeight: FontWeight.bold),
+                                    ),
+                                    Container(
+                                      width: 70,
+                                      height: 25,
+                                      decoration: const BoxDecoration(
+                                        image: DecorationImage(
+                                          image: AssetImage('assets/images/icon text.png'),
+                                          fit: BoxFit.contain,
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                );
+                                    ),
+                                  ],
+                                ),
+                                Container(
+                                  width: 200,
+                                  child: Text(user["address"] != null
+                                      ? user["address"].toString()
+                                      : "Belum ada lokasi"),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
+                            stream: controller.streamAllPegawai(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return Center(child: CircularProgressIndicator());
                               }
-                            } else {
-                              return Center(child: Text("No Data"));
-                            }
-                          }),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      if (user['role'] == 'admin')
-                        AdminScreen(controller: controller)
-                      else
-                        PegawaiScreen(controller: controller)
-                    ],
+                              if (snapshot.hasData) {
+                                List<QueryDocumentSnapshot<Map<String, dynamic>>>
+                                    data = snapshot.data!.docs;
+                                if (user['role'] == 'admin') {
+                                  return Container(
+                                    width: double.infinity,
+                                    padding: EdgeInsets.all(20),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.white,
+                                    ),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Total Pegawai :",
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                          (data.length - 1).toString(),
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                } else {
+                                  return Container(
+                                    width: double.infinity,
+                                    padding: EdgeInsets.all(20),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.white,
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Center(
+                                          child: Text(
+                                            user['job'],
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                        Text(
+                                          user['nama'],
+                                          style: TextStyle(
+                                              fontSize: 30,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        Text(
+                                          user['nip'],
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }
+                              } else {
+                                return Center(child: Text("No Data"));
+                              }
+                            }),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        if (user['role'] == 'admin')
+                          AdminScreen(controller: controller)
+                        else
+                          PegawaiScreen(controller: controller)
+                      ],
+                    ),
                   ),
-                ),
-              );
-            } else {
-              return Center(child: Text("No Data"));
-            }
-          },
+                );
+              } else {
+                return Center(child: Text("No Data"));
+              }
+            },
+          ),
         ),
+
         bottomNavigationBar: ConvexAppBar(
           style: TabStyle.fixedCircle,
           items: [
@@ -224,10 +240,11 @@ class PegawaiScreen extends StatelessWidget {
     return Column(
       children: [
         Container(
+          width: double.infinity,
           padding: EdgeInsets.all(20),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
-            color: Colors.grey[200],
+            color: Colors.white,
           ),
           child: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
               stream: controller.streamTodayPresence(),
@@ -243,8 +260,13 @@ class PegawaiScreen extends StatelessWidget {
                       children: [
                         Text("Masuk"),
                         Text(dataToday?["masuk"] == null
-                            ? "-"
-                            : "${DateFormat.jms().format(DateTime.parse(dataToday!['masuk']['date']))}"),
+                          ? "-"
+                          : "${DateFormat.jms().format(DateTime.parse(dataToday!['masuk']['date']))}",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            color: Colors.green,
+                          ),
+                        ),
                       ],
                     ),
                     Container(
@@ -256,8 +278,13 @@ class PegawaiScreen extends StatelessWidget {
                       children: [
                         Text("Keluar"),
                         Text(dataToday?["keluar"] == null
-                            ? "-"
-                            : "${DateFormat.jms().format(DateTime.parse(dataToday!['keluar']['date']))}"),
+                          ? "-"
+                          : "${DateFormat.jms().format(DateTime.parse(dataToday!['keluar']['date']))}",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            color: Colors.red,
+                          ),
+                        ),
                       ],
                     ),
                   ],
@@ -313,7 +340,7 @@ class PegawaiScreen extends StatelessWidget {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 20),
                     child: Material(
-                      color: Colors.grey[200],
+                      color: Colors.white,
                       borderRadius: BorderRadius.circular(20),
                       child: InkWell(
                         onTap: () => Get.toNamed(
@@ -427,17 +454,72 @@ class AdminScreen extends StatelessWidget {
                     }
                   },
                   child: Container(
+                    margin: EdgeInsets.symmetric(vertical: 5),
+                    width: double.infinity,
                     padding: EdgeInsets.all(20),
-                    margin: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-                    color: Colors.grey[200],
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white,
+                    ),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Nama : ${snapshot.data!.docs[index]["nama"]}"),
-                        Text("Job : ${snapshot.data!.docs[index]["job"]}"),
-                        Text(
-                            "Address : ${snapshot.data!.docs[index]["address"] == "" ? "-" : snapshot.data!.docs[index]["address"]}"),
-                        Text(
-                            "Presence : ${presenceToday.isEmpty || presenceToday['date'].substring(0, 10) != today ? "Belum Absen" : "Sudah Absen"}"),
+                        Row(
+                          children: [
+                            const Text("Nama"),
+                            const SizedBox(
+                              width: 30,
+                            ),
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.6 -4,
+                              child: Text(": ${snapshot.data!.docs[index]["nama"]}"),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Row(
+                          children: [
+                            const Text("Job"),
+                            const SizedBox(
+                              width: 44,
+                            ),
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.6 -4,
+                              child: Text(": ${snapshot.data!.docs[index]["job"]}")
+                            )
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Row(
+                          children: [
+                            Text("Address"),
+                            SizedBox(
+                              width: 16,),
+                            Text(": "),
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.6 -11,
+                              child: Text("${snapshot.data!.docs[index]["address"] == "" ? "-" : snapshot.data!.docs[index]["address"]}"),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Row(
+                          children: [
+                            Text("Presence"),
+                            SizedBox(
+                              width: 10,),
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.6 -4,
+                              child: Text(": ${presenceToday.isEmpty || presenceToday['date'].substring(0, 10) != today ? "Belum Absen" : "Sudah Absen"}")
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),

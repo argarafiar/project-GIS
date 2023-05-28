@@ -33,9 +33,11 @@ class _ProfileViewState extends State<ProfileView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.orange.shade50,
         appBar: AppBar(
           title: const Text('PROFILE'),
           centerTitle: true,
+          backgroundColor: Colors.orange.shade100,
         ),
         body: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
           stream: controller.streamUser(),

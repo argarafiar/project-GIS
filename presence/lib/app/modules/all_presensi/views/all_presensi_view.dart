@@ -11,9 +11,16 @@ class AllPresensiView extends GetView<AllPresensiController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.orange.shade50,
       appBar: AppBar(
-        title: const Text('SEMUA PRESENSI'),
+        title: const Text(
+          'SEMUA PRESENSI',
+          style: TextStyle(color: Colors.black),
+        ),
         centerTitle: true,
+        backgroundColor: Colors.orange.shade100,
+        iconTheme: IconThemeData(color: Colors.black),
+
       ),
       body: GetBuilder<AllPresensiController>(
         builder: (c) => FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
@@ -37,7 +44,7 @@ class AllPresensiView extends GetView<AllPresensiController> {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 20),
                     child: Material(
-                      color: Colors.grey[200],
+                      color: Colors.white,
                       borderRadius: BorderRadius.circular(20),
                       child: InkWell(
                         onTap: () => Get.toNamed(
@@ -95,6 +102,7 @@ class AllPresensiView extends GetView<AllPresensiController> {
             }),
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.orange.shade500,
         onPressed: () {
           Get.dialog(
             Dialog(
