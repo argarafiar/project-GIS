@@ -1,18 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:convex_bottom_bar/convex_bottom_bar.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'package:get/get.dart';
 import 'package:presence/app/controllers/page_index_controller.dart';
+import 'package:presence/app/widgets/custom_bottom_bar.dart';
 
 import '../../../routes/app_pages.dart';
 import '../controllers/home_controller.dart';
 // import '../../all_pegawai/controllers/all_pegawai_controller.dart';
 
 class HomeView extends StatefulWidget {
-  HomeView({Key? key}) : super(key: key);
+  const HomeView({Key? key}) : super(key: key);
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -23,8 +22,8 @@ class _HomeViewState extends State<HomeView> {
   final controller = Get.put(HomeController());
   String isUser = "";
 
+  @override
   void initState() {
-    // TODO: implement initState
     controller.getUserRole().then((value) {
       setState(() {
         isUser = value;
@@ -36,13 +35,13 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.orange.shade50,
+        backgroundColor: Colors.orange.shade50,
         body: SafeArea(
           child: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
             stream: controller.streamUser(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               }
               if (snapshot.hasData) {
                 Map<String, dynamic> user = snapshot.data!.data()!;
@@ -50,11 +49,13 @@ class _HomeViewState extends State<HomeView> {
                     "https://ui-avatars.com/api/?name=${user["nama"]}";
                 return SingleChildScrollView(
                   child: Container(
-                    margin: EdgeInsets.all(20),
+                    margin: const EdgeInsets.all(20),
                     child: Column(
                       // padding: EdgeInsets.all(20),
                       children: [
-                        SizedBox(height: 10,),
+                        const SizedBox(
+                          height: 10,
+                        ),
                         Row(
                           children: [
                             ClipOval(
@@ -63,14 +64,12 @@ class _HomeViewState extends State<HomeView> {
                                 height: 75,
                                 color: Colors.grey[200],
                                 child: Image.network(
-                                  user["profile"] != null
-                                      ? user["profile"]
-                                      : defaultProfile,
+                                  user["profile"] ?? defaultProfile,
                                   fit: BoxFit.cover,
                                 ),
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: 20,
                             ),
                             Column(
@@ -78,17 +77,19 @@ class _HomeViewState extends State<HomeView> {
                               children: [
                                 Row(
                                   children: [
-                                    Text(
+                                    const Text(
                                       "Welcome ",
                                       style: TextStyle(
-                                          fontSize: 20, fontWeight: FontWeight.bold),
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold),
                                     ),
                                     Container(
                                       width: 70,
                                       height: 25,
                                       decoration: const BoxDecoration(
                                         image: DecorationImage(
-                                          image: AssetImage('assets/images/icon text.png'),
+                                          image: AssetImage(
+                                              'assets/images/icon text.png'),
                                           fit: BoxFit.contain,
                                         ),
                                       ),
@@ -105,7 +106,7 @@ class _HomeViewState extends State<HomeView> {
                             ),
                           ],
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
@@ -113,15 +114,18 @@ class _HomeViewState extends State<HomeView> {
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
-                                return Center(child: CircularProgressIndicator());
+                                return const Center(
+                                    child: CircularProgressIndicator());
                               }
                               if (snapshot.hasData) {
-                                List<QueryDocumentSnapshot<Map<String, dynamic>>>
-                                    data = snapshot.data!.docs;
+                                List<
+                                        QueryDocumentSnapshot<
+                                            Map<String, dynamic>>> data =
+                                    snapshot.data!.docs;
                                 if (user['role'] == 'admin') {
                                   return Container(
                                     width: double.infinity,
-                                    padding: EdgeInsets.all(20),
+                                    padding: const EdgeInsets.all(20),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20),
                                       color: Colors.white,
@@ -130,22 +134,22 @@ class _HomeViewState extends State<HomeView> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Text(
+                                        const Text(
                                           "Total Pegawai :",
                                           style: TextStyle(
                                               fontSize: 20,
                                               fontWeight: FontWeight.bold),
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           width: 5,
                                         ),
                                         Text(
                                           (data.length - 1).toString(),
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               fontSize: 20,
                                               fontWeight: FontWeight.bold),
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 10,
                                         ),
                                       ],
@@ -154,35 +158,37 @@ class _HomeViewState extends State<HomeView> {
                                 } else {
                                   return Container(
                                     width: double.infinity,
-                                    padding: EdgeInsets.all(20),
+                                    padding: const EdgeInsets.all(20),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(20),
                                       color: Colors.white,
                                     ),
                                     child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Center(
                                           child: Text(
                                             user['job'],
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.bold),
                                           ),
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 20,
                                         ),
                                         Text(
                                           user['nama'],
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               fontSize: 30,
                                               fontWeight: FontWeight.bold),
                                         ),
                                         Text(
                                           user['nip'],
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                             fontSize: 18,
                                           ),
                                         ),
@@ -191,10 +197,10 @@ class _HomeViewState extends State<HomeView> {
                                   );
                                 }
                               } else {
-                                return Center(child: Text("No Data"));
+                                return const Center(child: Text("No Data"));
                               }
                             }),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
                         if (user['role'] == 'admin')
@@ -206,24 +212,12 @@ class _HomeViewState extends State<HomeView> {
                   ),
                 );
               } else {
-                return Center(child: Text("No Data"));
+                return const Center(child: Text("No Data"));
               }
             },
           ),
         ),
-
-        bottomNavigationBar: ConvexAppBar(
-          style: TabStyle.fixedCircle,
-          items: [
-            TabItem(icon: Icons.home, title: 'Home'),
-            TabItem(
-                icon: isUser == 'admin' ? Icons.map : Icons.fingerprint,
-                title: 'Add'),
-            TabItem(icon: Icons.people, title: 'Profile'),
-          ],
-          initialActiveIndex: pageC.pageIndex.value,
-          onTap: (int i) => pageC.changPage(i, isUser),
-        ));
+        bottomNavigationBar: const CustomBottomBar());
   }
 }
 
@@ -241,7 +235,7 @@ class PegawaiScreen extends StatelessWidget {
       children: [
         Container(
           width: double.infinity,
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             color: Colors.white,
@@ -249,20 +243,22 @@ class PegawaiScreen extends StatelessWidget {
           child: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
               stream: controller.streamTodayPresence(),
               builder: (context, snapToday) {
-                if (snapToday.connectionState == ConnectionState.waiting)
-                  return Center(child: CircularProgressIndicator());
-
+                if (snapToday.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
                 Map<String, dynamic>? dataToday = snapToday.data?.data();
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Column(
                       children: [
-                        Text("Masuk"),
-                        Text(dataToday?["masuk"] == null
-                          ? "-"
-                          : "${DateFormat.jms().format(DateTime.parse(dataToday!['masuk']['date']))}",
-                          style: TextStyle(
+                        const Text("Masuk"),
+                        Text(
+                          dataToday?["masuk"] == null
+                              ? "-"
+                              : DateFormat.jms().format(
+                                  DateTime.parse(dataToday!['masuk']['date'])),
+                          style: const TextStyle(
                             fontWeight: FontWeight.w500,
                             color: Colors.green,
                           ),
@@ -276,11 +272,13 @@ class PegawaiScreen extends StatelessWidget {
                     ),
                     Column(
                       children: [
-                        Text("Keluar"),
-                        Text(dataToday?["keluar"] == null
-                          ? "-"
-                          : "${DateFormat.jms().format(DateTime.parse(dataToday!['keluar']['date']))}",
-                          style: TextStyle(
+                        const Text("Keluar"),
+                        Text(
+                          dataToday?["keluar"] == null
+                              ? "-"
+                              : DateFormat.jms().format(
+                                  DateTime.parse(dataToday!['keluar']['date'])),
+                          style: const TextStyle(
                             fontWeight: FontWeight.w500,
                             color: Colors.red,
                           ),
@@ -291,39 +289,40 @@ class PegawaiScreen extends StatelessWidget {
                 );
               }),
         ),
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
-        Divider(
+        const Divider(
           color: Colors.grey,
           thickness: 2,
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
+            const Text(
               "last 5 days",
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             TextButton(
               onPressed: () => Get.toNamed('/all-presensi'),
-              child: Text(
+              child: const Text(
                 "See All",
               ),
             ),
           ],
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
             stream: controller.streamLastPresence(),
             builder: (context, snapPresence) {
-              if (snapPresence.connectionState == ConnectionState.waiting)
-                return Center(child: CircularProgressIndicator());
+              if (snapPresence.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
               if (snapPresence.data?.docs.length == 0 ||
                   snapPresence.data == null)
                 return SizedBox(
@@ -366,7 +365,8 @@ class PegawaiScreen extends StatelessWidget {
                                           fontWeight: FontWeight.bold),
                                     ),
                                     Text(
-                                      "${DateFormat.yMMMEd().format(DateTime.parse(data["date"]))}",
+                                      DateFormat.yMMMEd()
+                                          .format(DateTime.parse(data["date"])),
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold),
                                     ),
@@ -374,7 +374,8 @@ class PegawaiScreen extends StatelessWidget {
                                 ),
                                 Text(data["masuk"]?["date"] == null
                                     ? "-"
-                                    : "${DateFormat.jms().format(DateTime.parse(data["masuk"]!["date"]))}"),
+                                    : DateFormat.jms().format(DateTime.parse(
+                                        data["masuk"]!["date"]))),
                                 SizedBox(
                                   height: 10,
                                 ),
@@ -384,7 +385,8 @@ class PegawaiScreen extends StatelessWidget {
                                 ),
                                 Text(data["keluar"]?["date"] == null
                                     ? "-"
-                                    : "${DateFormat.jms().format(DateTime.parse(data["keluar"]!["date"]))}"),
+                                    : DateFormat.jms().format(DateTime.parse(
+                                        data["keluar"]!["date"]))),
                                 SizedBox(
                                   height: 10,
                                 ),
@@ -471,8 +473,10 @@ class AdminScreen extends StatelessWidget {
                               width: 30,
                             ),
                             Container(
-                              width: MediaQuery.of(context).size.width * 0.6 -4,
-                              child: Text(": ${snapshot.data!.docs[index]["nama"]}"),
+                              width:
+                                  MediaQuery.of(context).size.width * 0.6 - 4,
+                              child: Text(
+                                  ": ${snapshot.data!.docs[index]["nama"]}"),
                             ),
                           ],
                         ),
@@ -486,9 +490,10 @@ class AdminScreen extends StatelessWidget {
                               width: 44,
                             ),
                             Container(
-                              width: MediaQuery.of(context).size.width * 0.6 -4,
-                              child: Text(": ${snapshot.data!.docs[index]["job"]}")
-                            )
+                                width:
+                                    MediaQuery.of(context).size.width * 0.6 - 4,
+                                child: Text(
+                                    ": ${snapshot.data!.docs[index]["job"]}"))
                           ],
                         ),
                         const SizedBox(
@@ -498,11 +503,14 @@ class AdminScreen extends StatelessWidget {
                           children: [
                             Text("Address"),
                             SizedBox(
-                              width: 16,),
+                              width: 16,
+                            ),
                             Text(": "),
                             Container(
-                              width: MediaQuery.of(context).size.width * 0.6 -11,
-                              child: Text("${snapshot.data!.docs[index]["address"] == "" ? "-" : snapshot.data!.docs[index]["address"]}"),
+                              width:
+                                  MediaQuery.of(context).size.width * 0.6 - 11,
+                              child: Text(
+                                  "${snapshot.data!.docs[index]["address"] == "" ? "-" : snapshot.data!.docs[index]["address"]}"),
                             ),
                           ],
                         ),
@@ -513,11 +521,13 @@ class AdminScreen extends StatelessWidget {
                           children: [
                             Text("Presence"),
                             SizedBox(
-                              width: 10,),
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.6 -4,
-                              child: Text(": ${presenceToday.isEmpty || presenceToday['date'].substring(0, 10) != today ? "Belum Absen" : "Sudah Absen"}")
+                              width: 10,
                             ),
+                            Container(
+                                width:
+                                    MediaQuery.of(context).size.width * 0.6 - 4,
+                                child: Text(
+                                    ": ${presenceToday.isEmpty || presenceToday['date'].substring(0, 10) != today ? "Belum Absen" : "Sudah Absen"}")),
                           ],
                         ),
                       ],

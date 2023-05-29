@@ -23,15 +23,23 @@ class _MapsAdminViewState extends State<MapsAdminView> {
     print(data[data.length - 1]["position"]);
     _setMarkers(data);
     return Scaffold(
-      body: GoogleMap(
-        mapType: MapType.normal,
-        initialCameraPosition: CameraPosition(
-          target: LatLng(data[data.length - 1]["position"]["lat"],
-              data[data.length - 1]["position"]["long"]),
-          zoom: 11,
+      body: Stack(children: [
+        GoogleMap(
+          mapType: MapType.normal,
+          initialCameraPosition: CameraPosition(
+            target: LatLng(data[data.length - 1]["position"]["lat"],
+                data[data.length - 1]["position"]["long"]),
+            zoom: 11,
+          ),
+          markers: _markers,
         ),
-        markers: _markers,
-      ),
+        Positioned(
+          top: 40,
+          left: 10,
+          child:
+              IconButton(onPressed: () => Get.back(), icon: Icon(Icons.close)),
+        )
+      ]),
     );
   }
 

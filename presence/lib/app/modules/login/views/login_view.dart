@@ -1,8 +1,5 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-
 import '../../../routes/app_pages.dart';
 import '../controllers/login_controller.dart';
 
@@ -30,7 +27,6 @@ class LoginView extends GetView<LoginController> {
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 10),
                 const Text(
                   'Login ABSENiN',
@@ -53,7 +49,6 @@ class LoginView extends GetView<LoginController> {
                     TextField(
                       autocorrect: false,
                       controller: controller.emailC,
-                      
                       decoration: const InputDecoration(
                         filled: true,
                         fillColor: Colors.white,
@@ -69,13 +64,13 @@ class LoginView extends GetView<LoginController> {
                           borderSide: BorderSide(color: Colors.white),
                           borderRadius: BorderRadius.all(Radius.circular(25)),
                         ),
-                        contentPadding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
+                        contentPadding: EdgeInsets.symmetric(
+                            vertical: 16.0, horizontal: 12.0),
                       ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 20),
-          
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
@@ -99,58 +94,62 @@ class LoginView extends GetView<LoginController> {
                             fillColor: Colors.white,
                             // labelText: 'Email',
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.all(Radius.circular(25)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(25)),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.white),
-                              borderRadius: BorderRadius.all(Radius.circular(25)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(25)),
                             ),
                             focusedBorder: OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.white),
-                              borderRadius: BorderRadius.all(Radius.circular(25)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(25)),
                             ),
-                            contentPadding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 12.0),
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 16.0, horizontal: 12.0),
                           ),
                         ),
                       ],
                     ),
                     TextButton(
-                          onPressed: () => Get.toNamed(Routes.FORGOT_PASSWORD),
-                          child: Text(
-                            'Lupa Password?',
-                            style: TextStyle(
-                              color: Colors.grey.shade700,
-                            ),
-                          ),
+                      onPressed: () => Get.toNamed(Routes.FORGOT_PASSWORD),
+                      child: Text(
+                        'Lupa Password?',
+                        style: TextStyle(
+                          color: Colors.grey.shade700,
                         ),
+                      ),
+                    ),
                   ],
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 Obx(
                   () => FractionallySizedBox(
                     widthFactor: 1,
                     child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            backgroundColor: Colors.orange,
-                          ),
-                          onPressed: () async {
-                            if (controller.isLoading.isFalse) {
-                              await controller.login();
-                            }
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child: Text(
-                              controller.isLoading.isFalse ? 'LOGIN' : 'LOADING...',
-                              style: const TextStyle(
-                                fontSize: 20,
-                              ),
-                            ),
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        backgroundColor: Colors.orange,
+                      ),
+                      onPressed: () async {
+                        if (controller.isLoading.isFalse) {
+                          await controller.login();
+                        }
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: Text(
+                          controller.isLoading.isFalse ? 'LOGIN' : 'LOADING...',
+                          style: const TextStyle(
+                            fontSize: 20,
                           ),
                         ),
+                      ),
+                    ),
                   ),
                 ),
               ],

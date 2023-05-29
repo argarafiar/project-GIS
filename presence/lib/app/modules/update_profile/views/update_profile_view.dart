@@ -21,6 +21,7 @@ class UpdateProfileView extends GetView<UpdateProfileController> {
       appBar: AppBar(
         title: const Text('UPDATE PROFILE'),
         centerTitle: true,
+        backgroundColor: Colors.orange,
       ),
       body: ListView(
         padding: EdgeInsets.all(20),
@@ -68,42 +69,43 @@ class UpdateProfileView extends GetView<UpdateProfileController> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               GetBuilder<UpdateProfileController>(
-                builder: (c){
-                  if(c.image != null){
+                builder: (c) {
+                  if (c.image != null) {
                     return ClipOval(
                       child: Container(
-                        height: 100,
-                        width: 100,
-                        child: Image.file(
-                          File(c.image!.path),
-                          fit: BoxFit.cover,
-                        )
-                      ),
+                          height: 100,
+                          width: 100,
+                          child: Image.file(
+                            File(c.image!.path),
+                            fit: BoxFit.cover,
+                          )),
                     );
                   } else {
-                    if(user["profile"] != null){
+                    if (user["profile"] != null) {
                       return Column(
                         children: [
                           ClipOval(
                             child: Container(
-                              height: 100,
-                              width: 100,
-                              child: Image.network(
-                                user["profile"],
-                                fit: BoxFit.cover,
-                              )
-                            ),
+                                height: 100,
+                                width: 100,
+                                child: Image.network(
+                                  user["profile"],
+                                  fit: BoxFit.cover,
+                                )),
                           ),
                           TextButton(
                             onPressed: () {
                               controller.deleteImage(user["uid"]);
                             },
-                            child: Text("delete"),
+                            child: Text(
+                              "delete",
+                              style: TextStyle(color: Colors.orange),
+                            ),
                           )
                         ],
                       );
                     } else {
-                      return Text ("Tidak Ada Foto Profile.");
+                      return Text("Tidak Ada Foto Profile.");
                     }
                   }
                 },
@@ -113,7 +115,10 @@ class UpdateProfileView extends GetView<UpdateProfileController> {
                 onPressed: () {
                   controller.pickImage();
                 },
-                child: Text("Choose Photo"),
+                child: Text(
+                  "Choose Photo",
+                  style: TextStyle(color: Colors.orange),
+                ),
               )
             ],
           ),
@@ -126,6 +131,7 @@ class UpdateProfileView extends GetView<UpdateProfileController> {
                   controller.updateProfile(user["uid"]);
                 }
               },
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
               child:
                   Text(controller.isLoading.isFalse ? 'Simpan' : 'Loading...')))
         ],
