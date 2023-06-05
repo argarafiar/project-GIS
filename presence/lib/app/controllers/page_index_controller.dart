@@ -99,8 +99,14 @@ class PageIndexController extends GetxController {
           title: "Validasi Absen",
           middleText: "Apakah kamu yakin akan absen masuk?",
           actions: [
-            OutlinedButton(onPressed: () => Get.back(), child: Text("batal")),
+            OutlinedButton(
+                onPressed: () => Get.back(),
+                child: Text(
+                  "batal",
+                  style: TextStyle(color: Colors.orange),
+                )),
             ElevatedButton(
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
                 onPressed: () async {
                   await colPresence.doc(todayDocID).set({
                     "date": now.toIso8601String(),
@@ -133,8 +139,14 @@ class PageIndexController extends GetxController {
               middleText: "Apakah kamu yakin akan absen keluar?",
               actions: [
                 OutlinedButton(
-                    onPressed: () => Get.back(), child: Text("batal")),
+                    onPressed: () => Get.back(),
+                    child: Text(
+                      "batal",
+                      style: TextStyle(color: Colors.orange),
+                    )),
                 ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orange),
                     onPressed: () async {
                       await colPresence.doc(todayDocID).update({
                         "keluar": {
@@ -158,8 +170,15 @@ class PageIndexController extends GetxController {
             title: "Validasi Absen",
             middleText: "Apakah kamu yakin akan absen masuk?",
             actions: [
-              OutlinedButton(onPressed: () => Get.back(), child: Text("batal")),
+              OutlinedButton(
+                  onPressed: () => Get.back(),
+                  child: Text(
+                    "batal",
+                    style: TextStyle(color: Colors.orange),
+                  )),
               ElevatedButton(
+                  style:
+                      ElevatedButton.styleFrom(backgroundColor: Colors.orange),
                   onPressed: () async {
                     await colPresence.doc(todayDocID).set({
                       "date": now.toIso8601String(),
